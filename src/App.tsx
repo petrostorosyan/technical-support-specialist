@@ -1,12 +1,12 @@
-import './App.css'
+import "./App.css";
+import Header from "./components/icons/header/Header";
 
 function App() {
-
   return (
     <div className="app">
-   Task
+      <Header />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
