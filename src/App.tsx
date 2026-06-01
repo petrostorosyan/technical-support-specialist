@@ -1,14 +1,12 @@
 import "./App.css";
 import Header from "./components/header/Header";
+import PostsSection from "./components/posts/PostsSection";
 
 function App() {
   return (
     <div className="app">
       <Header />
-      <div style={{ height: "2000px", padding: "20px" }}>
-        <h1>Welcome to My App</h1>
-        <p>This is a simple React app with a header.</p>
-      </div>
+      <PostsSection />
     </div>
   );
 }

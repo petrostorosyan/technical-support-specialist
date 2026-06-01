@@ -1,71 +1,12 @@
-import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
 import logo from "../../assets/logo.svg";
 import SearchIcon from "../icons/SearchIcon";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 
-const HIDE_AFTER_STICKY_OFFSET = 200;
-
 const Header = () => {
-  const topBarRef = useRef<HTMLDivElement | null>(null);
-  const previousScrollYRef = useRef(0);
-  const [topBarHeight, setTopBarHeight] = useState(0);
-  const [isMenuHidden, setIsMenuHidden] = useState(false);
-
-  useEffect(() => {
-    const topBarElement = topBarRef.current;
-
-    if (!topBarElement) {
-      return;
-    }
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      setTopBarHeight(entry.contentRect.height);
-    });
-
-    resizeObserver.observe(topBarElement);
-    setTopBarHeight(topBarElement.getBoundingClientRect().height);
-
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 0) {
-        setIsMenuHidden(false);
-        previousScrollYRef.current = 0;
-        return;
-      }
-
-      const isScrollingDown = currentScrollY > previousScrollYRef.current;
-      const hideThreshold = topBarHeight + HIDE_AFTER_STICKY_OFFSET;
-
-      if (isScrollingDown && currentScrollY > hideThreshold) {
-        setIsMenuHidden(true);
-      }
-
-      if (!isScrollingDown) {
-        setIsMenuHidden(false);
-      }
-
-      previousScrollYRef.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [topBarHeight]);
-
   return (
     <header className={styles.header}>
-      <div ref={topBarRef} className={styles.topBar}>
+      <div className={styles.topBar}>
         <div className={styles.container}>
           <img src={logo} alt="Logo" className={styles.logo} />
         </div>
@@ -86,10 +27,7 @@ const Header = () => {
         </div>
       </div>
 
-      <nav
-        className={`${styles.menu} ${isMenuHidden ? styles.menuHidden : ""}`}
-        aria-label="Main navigation"
-      >
+      <nav className={styles.menu} aria-label="Main navigation">
         <div className={styles.container}>
           <div className={styles.menuItem}>
             <a href="/" className={styles.menuLink}>
@@ -113,31 +51,41 @@ const Header = () => {
                 <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
                     <span>Post Header</span>
-                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
+                    <span className={styles.dropdownArrow}>
+                      <ChevronDownIcon />
+                    </span>
                   </a>
                 </li>
                 <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
                     <span>Post Layout</span>
-                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
+                    <span className={styles.dropdownArrow}>
+                      <ChevronDownIcon />
+                    </span>
                   </a>
                 </li>
                 <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
                     <span>Share Buttons</span>
-                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
+                    <span className={styles.dropdownArrow}>
+                      <ChevronDownIcon />
+                    </span>
                   </a>
                 </li>
                 <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
                     <span>Gallery Post</span>
-                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
+                    <span className={styles.dropdownArrow}>
+                      <ChevronDownIcon />
+                    </span>
                   </a>
                 </li>
                 <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    <span>Video Post</span>                    
-                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
+                    <span>Video Post</span>
+                    <span className={styles.dropdownArrow}>
+                      <ChevronDownIcon />
+                    </span>
                   </a>
                 </li>
               </ul>
