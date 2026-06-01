@@ -104,7 +104,15 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       return;
     }
 
-    searchModalInputRef.current?.focus();
+    const focusId = window.requestAnimationFrame(() => {
+      const input = searchModalInputRef.current;
+      if (!input) {
+        return;
+      }
+      input.focus();
+      const valueLength = input.value.length;
+      input.setSelectionRange(valueLength, valueLength);
+    });
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -115,9 +123,14 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     document.addEventListener("keydown", handleEscape);
 
     return () => {
+      window.cancelAnimationFrame(focusId);
       document.removeEventListener("keydown", handleEscape);
     };
   }, [isSearchModalOpen]);
+
+  const openSearchModal = () => {
+    setIsSearchModalOpen(true);
+  };
 
   return (
     <>
@@ -142,7 +155,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                 type="button"
                 className={styles.searchButton}
                 aria-label="Search"
-                onClick={() => setIsSearchModalOpen(true)}
+                onClick={openSearchModal}
               >
                 <SearchIcon width={16} height={16} />
               </button>
@@ -254,34 +267,34 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
         </div>
       </nav>
 
-      <div
-        className={`${styles.searchModalOverlay} ${
-          isSearchModalOpen ? styles.searchModalOverlayVisible : ""
-        }`}
-        onClick={() => setIsSearchModalOpen(false)}
-      >
+      {isSearchModalOpen && (
         <div
-          className={styles.searchModal}
-          onClick={(event) => event.stopPropagation()}
+          className={`${styles.searchModalOverlay} ${styles.searchModalOverlayVisible}`}
+          onClick={() => setIsSearchModalOpen(false)}
         >
-          <input
-            ref={searchModalInputRef}
-            type="search"
-            placeholder="Search by title..."
-            className={styles.searchModalInput}
-            value={searchQuery}
-            onChange={(event) => onSearchChange(event.target.value)}
-            aria-label="Search posts"
-          />
-          <button
-            type="button"
-            className={styles.searchModalClose}
-            onClick={() => setIsSearchModalOpen(false)}
+          <div
+            className={styles.searchModal}
+            onClick={(event) => event.stopPropagation()}
           >
-            Close
-          </button>
+            <input
+              ref={searchModalInputRef}
+              type="search"
+              placeholder="Search by title..."
+              className={styles.searchModalInput}
+              value={searchQuery}
+              onChange={(event) => onSearchChange(event.target.value)}
+              aria-label="Search posts"
+            />
+            <button
+              type="button"
+              className={styles.searchModalClose}
+              onClick={() => setIsSearchModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div
         className={`${styles.mobileOverlay} ${

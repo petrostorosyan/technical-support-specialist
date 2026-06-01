@@ -1,10 +1,17 @@
 .postsSection {
-  padding: 3rem 0 3rem;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  transition: 0.5s;
 }
 
 .postsContainer {
   width: min(72.5rem, calc(100% - 2rem));
-  margin: 0 auto;
+  transition: 0.5s;
 }
 
 .stateMessage {
@@ -155,6 +162,17 @@
   min-height: 12rem;
 }
 
+@media (max-width: 1250px) {
+  .postsContainer {
+    width: 100%;
+  }
+
+  .postsSection {
+  margin-top: 0;
+  padding: 1.5rem;
+}
+}
+
 @media (max-width: 64rem) {
   .postCard {
     flex-basis: calc((100% - 2.5rem) / 2);
@@ -163,10 +181,6 @@
 }
 
 @media (max-width: 48rem) {
-  .postsSection {
-    padding-top: 2rem;
-  }
-
   .postsGrid {
     gap: 1.5rem;
   }
@@ -174,5 +188,12 @@
   .postCard {
     flex-basis: 100%;
     max-width: 100%;
+  }
+}
+
+@media (max-width: 40rem) {
+  .postsSection {
+    padding: 1.5rem 0.75rem;
+    padding-top: 0.5rem;
   }
 }
