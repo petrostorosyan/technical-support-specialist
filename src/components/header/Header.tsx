@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./Header.module.css";
-import logo from "../../assets/logo.svg";
-import SearchIcon from "../icons/SearchIcon";
-import ChevronDownIcon from "../icons/ChevronDownIcon";
+import HeaderTopBar from "./components/HeaderTopBar";
+import DesktopMenu from "./components/DesktopMenu";
+import SearchModal from "./components/SearchModal";
+import MobileMenu from "./components/MobileMenu";
 
 type HeaderProps = {
   searchQuery: string;
@@ -109,6 +109,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       if (!input) {
         return;
       }
+
       input.focus();
       const valueLength = input.value.length;
       input.setSelectionRange(valueLength, valueLength);
@@ -128,227 +129,28 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     };
   }, [isSearchModalOpen]);
 
-  const openSearchModal = () => {
-    setIsSearchModalOpen(true);
-  };
-
   return (
     <>
-      <header className={styles.header}>
-        <div ref={topBarRef} className={styles.topBar}>
-          <div className={styles.topBarContainer}>
-            <button
-              type="button"
-              className={styles.hamburgerButton}
-              aria-label="Open mobile menu"
-              onClick={() => setIsMobileMenuOpen(true)}
-            >
-              <span className={styles.hamburgerLine} />
-              <span className={styles.hamburgerLine} />
-              <span className={styles.hamburgerLine} />
-            </button>
+      <HeaderTopBar
+        topBarRef={topBarRef}
+        onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
+        onOpenSearchModal={() => setIsSearchModalOpen(true)}
+      />
 
-            <img src={logo} alt="Logo" className={styles.logo} />
+      <DesktopMenu isMenuHidden={isMenuHidden} />
 
-            <div className={styles.searchBox}>
-              <button
-                type="button"
-                className={styles.searchButton}
-                aria-label="Search"
-                onClick={openSearchModal}
-              >
-                <SearchIcon width={16} height={16} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        searchQuery={searchQuery}
+        searchInputRef={searchModalInputRef}
+        onSearchChange={onSearchChange}
+        onClose={() => setIsSearchModalOpen(false)}
+      />
 
-      <nav
-        className={`${styles.menu} ${isMenuHidden ? styles.menuHidden : ""}`}
-        aria-label="Main navigation"
-      >
-        <div className={styles.container}>
-          <div className={styles.menuItem}>
-            <a href="/" className={styles.menuLink}>
-              Demos{" "}
-              <span className={styles.caret}>
-                <ChevronDownIcon className={styles.menuChevron} />
-              </span>
-            </a>
-          </div>
-
-          <div className={`${styles.menuItem} ${styles.menuItemWithDropdown}`}>
-            <a href="/" className={styles.menuLink}>
-              Post{" "}
-              <span className={styles.caret}>
-                <ChevronDownIcon className={styles.menuChevron} />
-              </span>
-            </a>
-
-            <div className={styles.dropdown}>
-              <ul className={styles.dropdownList}>
-                <li className={styles.li}>
-                  <a href="/" className={styles.dropdownLink}>
-                    <span>Post Header</span>
-                    <span className={styles.dropdownArrow}>
-                      <ChevronDownIcon />
-                    </span>
-                  </a>
-                </li>
-                <li className={styles.li}>
-                  <a href="/" className={styles.dropdownLink}>
-                    <span>Post Layout</span>
-                    <span className={styles.dropdownArrow}>
-                      <ChevronDownIcon />
-                    </span>
-                  </a>
-                </li>
-                <li className={styles.li}>
-                  <a href="/" className={styles.dropdownLink}>
-                    <span>Share Buttons</span>
-                    <span className={styles.dropdownArrow}>
-                      <ChevronDownIcon />
-                    </span>
-                  </a>
-                </li>
-                <li className={styles.li}>
-                  <a href="/" className={styles.dropdownLink}>
-                    <span>Gallery Post</span>
-                    <span className={styles.dropdownArrow}>
-                      <ChevronDownIcon />
-                    </span>
-                  </a>
-                </li>
-                <li className={styles.li}>
-                  <a href="/" className={styles.dropdownLink}>
-                    <span>Video Post</span>
-                    <span className={styles.dropdownArrow}>
-                      <ChevronDownIcon />
-                    </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className={styles.menuItem}>
-            <a href="/" className={styles.menuLink}>
-              Features{" "}
-              <span className={styles.caret}>
-                <ChevronDownIcon className={styles.menuChevron} />
-              </span>
-            </a>
-          </div>
-
-          <div className={styles.menuItem}>
-            <a href="/" className={styles.menuLink}>
-              Categories{" "}
-              <span className={styles.caret}>
-                <ChevronDownIcon className={styles.menuChevron} />
-              </span>
-            </a>
-          </div>
-
-          <div className={styles.menuItem}>
-            <a href="/" className={styles.menuLink}>
-              Shop{" "}
-              <span className={styles.caret}>
-                <ChevronDownIcon className={styles.menuChevron} />
-              </span>
-            </a>
-          </div>
-
-          <div className={styles.menuItem}>
-            <a href="/" className={styles.menuLink}>
-              Buy Now
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      {isSearchModalOpen && (
-        <div
-          className={`${styles.searchModalOverlay} ${styles.searchModalOverlayVisible}`}
-          onClick={() => setIsSearchModalOpen(false)}
-        >
-          <div
-            className={styles.searchModal}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <input
-              ref={searchModalInputRef}
-              type="search"
-              placeholder="Search by title..."
-              className={styles.searchModalInput}
-              value={searchQuery}
-              onChange={(event) => onSearchChange(event.target.value)}
-              aria-label="Search posts"
-            />
-            <button
-              type="button"
-              className={styles.searchModalClose}
-              onClick={() => setIsSearchModalOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div
-        className={`${styles.mobileOverlay} ${
-          isMobileMenuOpen ? styles.mobileOverlayVisible : ""
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      >
-        <aside
-          className={`${styles.mobileMenu} ${
-            isMobileMenuOpen ? styles.mobileMenuOpen : ""
-          }`}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <div className={styles.mobileMenuHeader}>
-            <img src={logo} alt="Logo" className={styles.mobileMenuLogo} />
-
-            <button
-              type="button"
-              className={styles.closeButton}
-              aria-label="Close mobile menu"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <span className={styles.closeLine} />
-              <span className={styles.closeLine} />
-            </button>
-          </div>
-
-          <nav className={styles.mobileNav} aria-label="Mobile navigation">
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Demos</span>
-              <ChevronDownIcon className={styles.mobileNavChevron} />
-            </a>
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Post</span>
-              <ChevronDownIcon className={styles.mobileNavChevron} />
-            </a>
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Features</span>
-              <ChevronDownIcon className={styles.mobileNavChevron} />
-            </a>
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Categories</span>
-              <ChevronDownIcon className={styles.mobileNavChevron} />
-            </a>
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Shop</span>
-              <ChevronDownIcon className={styles.mobileNavChevron} />
-            </a>
-            <a href="/" className={styles.mobileNavLink}>
-              <span>Buy Now</span>
-            </a>
-          </nav>
-        </aside>
-      </div>
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
     </>
   );
 };
