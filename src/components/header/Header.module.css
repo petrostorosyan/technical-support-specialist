@@ -4,28 +4,38 @@
 
 .topBar {
   width: 100%;
+  height: 82px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 3.375rem;
+  padding: 0 1.5rem;
   border-bottom: 1px solid #dddddd;
+  transition: 0.5s;
 }
 
-.topBar .container {
-  width: 100%;
+.topBarContainer {
+  position: relative;
+  width: 1160px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.5s;
 }
 
 .logo {
   justify-self: center;
-  width: 11.3125rem;
+  width: 181px;
   height: auto;
+  transition: 0.5s;
 }
 
 .searchBox {
+  position: absolute;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 380px;
   border: 1px solid #d5d5d5;
   border-radius: 0.5rem;
   padding: 0 0.5rem;
@@ -33,7 +43,7 @@
 }
 
 .searchInput {
-  width: 16rem;
+  width: 12rem;
   height: 2rem;
   border: 0;
   outline: none;
@@ -169,7 +179,7 @@
   transition:
     color 0.5s ease,
     opacity 0.5s ease;
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .dropdownLink:hover {
@@ -179,13 +189,33 @@
 
 .dropdownLink:hover span {
   margin-left: 0.25rem;
-  transition: 0.3s
+  transition: 0.3s;
 }
 
 .dropdownArrow {
   color: currentColor;
   font-size: 1rem;
   font-weight: 400;
+}
+
+@media (max-width: 1215px) {
+  .topBar {
+    height: 70px;
+  }
+
+  .topBarContainer {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .logo {
+    justify-self: start;
+  }
+
+  .searchBox {
+    position: unset;
+    right: 0;
+  }
 }
 
 @media (max-width: 64rem) {
@@ -195,11 +225,6 @@
 
   .topBar .container {
     grid-template-columns: 1fr auto;
-  }
-
-  .logo {
-    justify-self: start;
-    width: 9.5rem;
   }
 }
 

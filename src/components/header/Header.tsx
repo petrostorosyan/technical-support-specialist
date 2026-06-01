@@ -12,10 +12,9 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   return (
     <header className={styles.header}>
       <div className={styles.topBar}>
-        <div className={styles.container}>
+        <div className={styles.topBarContainer}>
           <img src={logo} alt="Logo" className={styles.logo} />
-        </div>
-        <div className={styles.searchBox}>
+          <div className={styles.searchBox}>
           <input
             type="search"
             placeholder="Search by title or description..."
@@ -32,6 +31,8 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
             <SearchIcon width={16} height={16} />
           </button>
         </div>
+        </div>
+        
       </div>
 
       <nav className={styles.menu} aria-label="Main navigation">
