@@ -1,9 +1,9 @@
 .postsSection {
-  padding: 2rem 0 3rem;
+  padding: 3rem 0 3rem;
 }
 
 .postsContainer {
-  width: 1160px;
+  width: min(72.5rem, calc(100% - 2rem));
   margin: 0 auto;
 }
 
@@ -18,18 +18,19 @@
 
 .postsGrid {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   flex-wrap: wrap;
-  gap: 40px;
+  gap: 2.5rem;
 }
 
 .postCard {
-  width: 360px;
+  flex: 0 1 calc((100% - 5rem) / 3);
+  max-width: calc((100% - 5rem) / 3);
   cursor: pointer;
   border-radius: 0.125rem;
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .postCard:hover {
@@ -41,6 +42,12 @@
   width: 100%;
   aspect-ratio: 304 / 203;
   object-fit: cover;
+}
+
+@media (min-width: 64.0625rem) {
+  .postImage {
+    height: 230px;
+  }
 }
 
 .postContent {
@@ -55,10 +62,11 @@
 }
 
 .postTitle {
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  line-height: 1.15;
-  color: #0f0f0f;
+  line-height: 30px;
+  color: #000000;
+  letter-spacing: 0;
   margin-bottom: 1rem;
 }
 
@@ -72,14 +80,31 @@
   margin-bottom: 1rem;
 }
 
+.postAuthor {
+  color: #000000;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0;
+}
+
+.postMetaMuted {
+  color: #9b9b9b;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 12px;
+  letter-spacing: 0;
+}
+
 .metaDot {
   color: #d2d2d2;
 }
 
 .postText {
-  font-size: 1.5rem;
-  line-height: 1.45;
+  font-weight: 400;
   color: #939393;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
 }
 
 .modalOverlay {
@@ -127,19 +152,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 160px);
+  min-height: 12rem;
+}
+
+@media (max-width: 64rem) {
+  .postCard {
+    flex-basis: calc((100% - 2.5rem) / 2);
+    max-width: calc((100% - 2.5rem) / 2);
+  }
 }
 
 @media (max-width: 48rem) {
   .postsSection {
-    padding-top: 1.25rem;
+    padding-top: 2rem;
   }
 
-  .postTitle {
-    font-size: 1.75rem;
+  .postsGrid {
+    gap: 1.5rem;
   }
 
-  .postText {
-    font-size: 1.125rem;
+  .postCard {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 }

@@ -31,13 +31,11 @@ const PostsSection = ({ searchQuery }: PostsSectionProps) => {
         setErrorMessage("");
 
         const response = await fetch(POSTS_ENDPOINT);
-
         if (!response.ok) {
           throw new Error(`Failed to load posts: ${response.status}`);
         }
 
         const data: unknown = await response.json();
-
         if (!Array.isArray(data)) {
           throw new Error("Unexpected response format");
         }
@@ -59,7 +57,6 @@ const PostsSection = ({ searchQuery }: PostsSectionProps) => {
 
   const filteredPosts = useMemo(() => {
     const normalizedSearch = searchQuery.trim().toLowerCase();
-
     if (!normalizedSearch) {
       return posts;
     }
@@ -111,6 +108,7 @@ const PostsSection = ({ searchQuery }: PostsSectionProps) => {
                     <img
                       src={post.img}
                       srcSet={`${post.img} 1x, ${post.img_2x} 2x`}
+                      sizes="(max-width: 48rem) 100vw, (max-width: 64rem) 50vw, 33vw"
                       alt={post.title}
                       className={styles.postImage}
                     />
@@ -119,11 +117,11 @@ const PostsSection = ({ searchQuery }: PostsSectionProps) => {
                       <p className={styles.postTag}>{post.tags}</p>
                       <h2 className={styles.postTitle}>{post.title}</h2>
                       <p className={styles.postMeta}>
-                        <span>{post.autor}</span>
-                        <span className={styles.metaDot}>•</span>
-                        <span>{post.date}</span>
-                        <span className={styles.metaDot}>•</span>
-                        <span>{post.views} Views</span>
+                        <span className={styles.postAuthor}>{post.autor}</span>
+                        <span className={styles.metaDot}>&bull;</span>
+                        <span className={styles.postMetaMuted}>{post.date}</span>
+                        <span className={styles.metaDot}>&bull;</span>
+                        <span className={styles.postMetaMuted}>{post.views} Views</span>
                       </p>
                       <p className={styles.postText}>{post.text}</p>
                     </div>
