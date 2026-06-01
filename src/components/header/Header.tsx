@@ -13,15 +13,12 @@ const HIDE_AFTER_STICKY_OFFSET = 200;
 
 const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const topBarRef = useRef<HTMLDivElement | null>(null);
-  const searchBoxRef = useRef<HTMLDivElement | null>(null);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const responsiveSearchInputRef = useRef<HTMLInputElement | null>(null);
+  const searchModalInputRef = useRef<HTMLInputElement | null>(null);
   const lastScrollYRef = useRef(0);
   const [topBarHeight, setTopBarHeight] = useState(0);
   const [isMenuHidden, setIsMenuHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isDesktopSearchOpen, setIsDesktopSearchOpen] = useState(false);
-  const [isResponsiveSearchOpen, setIsResponsiveSearchOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
     const topBarElement = topBarRef.current;
@@ -79,7 +76,6 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     const handleDesktopMode = (event: MediaQueryListEvent) => {
       if (event.matches) {
         setIsMobileMenuOpen(false);
-        setIsResponsiveSearchOpen(false);
       }
     };
 
@@ -87,7 +83,6 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
     if (mediaQuery.matches) {
       setIsMobileMenuOpen(false);
-      setIsResponsiveSearchOpen(false);
     }
 
     return () => {
@@ -96,60 +91,24 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen || isResponsiveSearchOpen) {
+    if (isMobileMenuOpen || isSearchModalOpen) {
       document.body.style.overflow = "hidden";
       return;
     }
 
     document.body.style.overflow = "";
-  }, [isMobileMenuOpen, isResponsiveSearchOpen]);
+  }, [isMobileMenuOpen, isSearchModalOpen]);
 
   useEffect(() => {
-    if (!isDesktopSearchOpen) {
+    if (!isSearchModalOpen) {
       return;
     }
 
-    searchInputRef.current?.focus();
-
-    const handleOutsideClick = (event: MouseEvent) => {
-      const isDesktop = window.matchMedia("(min-width: 64.0625rem)").matches;
-      const target = event.target as Node;
-
-      if (
-        isDesktop &&
-        searchBoxRef.current &&
-        !searchBoxRef.current.contains(target) &&
-        !searchQuery
-      ) {
-        setIsDesktopSearchOpen(false);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !searchQuery) {
-        setIsDesktopSearchOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleOutsideClick);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isDesktopSearchOpen, searchQuery]);
-
-  useEffect(() => {
-    if (!isResponsiveSearchOpen) {
-      return;
-    }
-
-    responsiveSearchInputRef.current?.focus();
+    searchModalInputRef.current?.focus();
 
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsResponsiveSearchOpen(false);
+        setIsSearchModalOpen(false);
       }
     };
 
@@ -158,16 +117,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [isResponsiveSearchOpen]);
-
-  const handleSearchClick = () => {
-    if (window.matchMedia("(max-width: 75.9375rem)").matches) {
-      setIsResponsiveSearchOpen(true);
-      return;
-    }
-
-    setIsDesktopSearchOpen(true);
-  };
+  }, [isSearchModalOpen]);
 
   return (
     <>
@@ -187,26 +137,12 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
             <img src={logo} alt="Logo" className={styles.logo} />
 
-            <div
-              ref={searchBoxRef}
-              className={`${styles.searchBox} ${
-                isDesktopSearchOpen || searchQuery ? styles.searchBoxOpen : ""
-              }`}
-            >
-              <input
-                ref={searchInputRef}
-                type="search"
-                placeholder="Search by title..."
-                className={styles.searchInput}
-                aria-label="Search input"
-                value={searchQuery}
-                onChange={(event) => onSearchChange(event.target.value)}
-              />
+            <div className={styles.searchBox}>
               <button
                 type="button"
                 className={styles.searchButton}
                 aria-label="Search"
-                onClick={handleSearchClick}
+                onClick={() => setIsSearchModalOpen(true)}
               >
                 <SearchIcon width={16} height={16} />
               </button>
@@ -320,18 +256,18 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
       <div
         className={`${styles.searchModalOverlay} ${
-          isResponsiveSearchOpen ? styles.searchModalOverlayVisible : ""
+          isSearchModalOpen ? styles.searchModalOverlayVisible : ""
         }`}
-        onClick={() => setIsResponsiveSearchOpen(false)}
+        onClick={() => setIsSearchModalOpen(false)}
       >
         <div
           className={styles.searchModal}
           onClick={(event) => event.stopPropagation()}
         >
           <input
-            ref={responsiveSearchInputRef}
+            ref={searchModalInputRef}
             type="search"
-            placeholder="Search by title or description..."
+            placeholder="Search by title..."
             className={styles.searchModalInput}
             value={searchQuery}
             onChange={(event) => onSearchChange(event.target.value)}
@@ -340,7 +276,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
           <button
             type="button"
             className={styles.searchModalClose}
-            onClick={() => setIsResponsiveSearchOpen(false)}
+            onClick={() => setIsSearchModalOpen(false)}
           >
             Close
           </button>
