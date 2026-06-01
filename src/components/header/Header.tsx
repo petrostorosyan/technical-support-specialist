@@ -15,11 +15,13 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const topBarRef = useRef<HTMLDivElement | null>(null);
   const searchBoxRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const responsiveSearchInputRef = useRef<HTMLInputElement | null>(null);
   const lastScrollYRef = useRef(0);
   const [topBarHeight, setTopBarHeight] = useState(0);
   const [isMenuHidden, setIsMenuHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDesktopSearchOpen, setIsDesktopSearchOpen] = useState(false);
+  const [isResponsiveSearchOpen, setIsResponsiveSearchOpen] = useState(false);
 
   useEffect(() => {
     const topBarElement = topBarRef.current;
@@ -77,6 +79,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     const handleDesktopMode = (event: MediaQueryListEvent) => {
       if (event.matches) {
         setIsMobileMenuOpen(false);
+        setIsResponsiveSearchOpen(false);
       }
     };
 
@@ -84,6 +87,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
     if (mediaQuery.matches) {
       setIsMobileMenuOpen(false);
+      setIsResponsiveSearchOpen(false);
     }
 
     return () => {
@@ -92,13 +96,13 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isResponsiveSearchOpen) {
       document.body.style.overflow = "hidden";
       return;
     }
 
     document.body.style.overflow = "";
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isResponsiveSearchOpen]);
 
   useEffect(() => {
     if (!isDesktopSearchOpen) {
@@ -135,6 +139,35 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
       document.removeEventListener("keydown", handleEscape);
     };
   }, [isDesktopSearchOpen, searchQuery]);
+
+  useEffect(() => {
+    if (!isResponsiveSearchOpen) {
+      return;
+    }
+
+    responsiveSearchInputRef.current?.focus();
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsResponsiveSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isResponsiveSearchOpen]);
+
+  const handleSearchClick = () => {
+    if (window.matchMedia("(max-width: 75.9375rem)").matches) {
+      setIsResponsiveSearchOpen(true);
+      return;
+    }
+
+    setIsDesktopSearchOpen(true);
+  };
 
   return (
     <>
@@ -173,7 +206,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                 type="button"
                 className={styles.searchButton}
                 aria-label="Search"
-                onClick={() => setIsDesktopSearchOpen(true)}
+                onClick={handleSearchClick}
               >
                 <SearchIcon width={16} height={16} />
               </button>
@@ -284,6 +317,35 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
           </div>
         </div>
       </nav>
+
+      <div
+        className={`${styles.searchModalOverlay} ${
+          isResponsiveSearchOpen ? styles.searchModalOverlayVisible : ""
+        }`}
+        onClick={() => setIsResponsiveSearchOpen(false)}
+      >
+        <div
+          className={styles.searchModal}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <input
+            ref={responsiveSearchInputRef}
+            type="search"
+            placeholder="Search by title or description..."
+            className={styles.searchModalInput}
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
+            aria-label="Search posts"
+          />
+          <button
+            type="button"
+            className={styles.searchModalClose}
+            onClick={() => setIsResponsiveSearchOpen(false)}
+          >
+            Close
+          </button>
+        </div>
+      </div>
 
       <div
         className={`${styles.mobileOverlay} ${
