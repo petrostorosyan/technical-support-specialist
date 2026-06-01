@@ -3,7 +3,12 @@ import logo from "../../assets/logo.svg";
 import SearchIcon from "../icons/SearchIcon";
 import ChevronDownIcon from "../icons/ChevronDownIcon";
 
-const Header = () => {
+type HeaderProps = {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+};
+
+const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   return (
     <header className={styles.header}>
       <div className={styles.topBar}>
@@ -13,9 +18,11 @@ const Header = () => {
         <div className={styles.searchBox}>
           <input
             type="search"
-            placeholder="Search..."
+            placeholder="Search by title or description..."
             className={styles.searchInput}
             aria-label="Search input"
+            value={searchQuery}
+            onChange={(event) => onSearchChange(event.target.value)}
           />
           <button
             type="button"

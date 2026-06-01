@@ -14,9 +14,12 @@ type Post = {
 
 const POSTS_ENDPOINT = "https://cloud.codesupply.co/endpoint/react/data.json";
 
-const PostsSection = () => {
+type PostsSectionProps = {
+  searchQuery: string;
+};
+
+const PostsSection = ({ searchQuery }: PostsSectionProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [search, setSearch] = useState("");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -55,7 +58,7 @@ const PostsSection = () => {
   }, []);
 
   const filteredPosts = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
+    const normalizedSearch = searchQuery.trim().toLowerCase();
 
     if (!normalizedSearch) {
       return posts;
@@ -68,23 +71,12 @@ const PostsSection = () => {
         title.includes(normalizedSearch) || text.includes(normalizedSearch)
       );
     });
-  }, [posts, search]);
+  }, [posts, searchQuery]);
 
   return (
     <>
       <main className={styles.postsSection}>
         <div className={styles.postsContainer}>
-          <div className={styles.searchWrapper}>
-            <input
-              value={search}
-              onChange={(event) => setSearch(event.target.value)}
-              type="search"
-              className={styles.searchInput}
-              placeholder="Search by title or description..."
-              aria-label="Search posts"
-            />
-          </div>
-
           {isLoading && <p className={styles.stateMessage}>Loading posts...</p>}
           {!isLoading && errorMessage && (
             <p className={`${styles.stateMessage} ${styles.stateError}`}>
@@ -95,7 +87,9 @@ const PostsSection = () => {
           {!isLoading && !errorMessage && (
             <>
               {!filteredPosts.length && (
-                <p className={styles.stateMessage}>No posts found.</p>
+                <div className={styles.noResults}>
+                  <p className={styles.stateMessage}>No posts found.</p>
+                </div>
               )}
 
               <div className={styles.postsGrid}>
