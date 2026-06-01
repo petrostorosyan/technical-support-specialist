@@ -38,7 +38,7 @@
 }
 
 .menu {
-    width: 100%;
+  width: 100%;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -65,7 +65,7 @@
 
 .menuItem {
   position: relative;
-  height: 100%;
+  height: 40px;
   display: flex;
   align-items: center;
 }
@@ -90,21 +90,30 @@
 }
 
 .caret {
-  margin-left: 0.125rem;
-  font-size: 0.625rem;
+  margin-left: 0.25rem;
+  display: inline-flex;
+  align-items: center;
   color: #737373;
+}
+
+.menuChevron {
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+}
+
+.menuItemWithDropdown:hover .menuChevron,
+.menuItemWithDropdown:focus-within .menuChevron {
+  transform: rotate(270deg);
 }
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 0.0625rem);
-  left: 50%;
-  transform: translateX(-34%);
-  min-width: 47.5rem;
-  display: flex;
-  border: 1px solid #dedede;
-  background-color: #ffffff;
-  box-shadow: 0 1rem 2.125rem rgba(15, 23, 42, 0.12);
+  top: 40px;
+  left: 85px;
+  transform: translateX(-49%);
+  width: 176px;
+  border: 1px solid #e9e9e9;
+  box-shadow: 0 0.5rem 1.5rem rgba(15, 23, 42, 0.12);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -119,58 +128,52 @@
 }
 
 .dropdownList {
-  width: 14.375rem;
+  width: 100%;
   margin: 0;
-  padding: 0.625rem 0;
+  padding: 15px 20px;
   list-style: none;
-  border-right: 1px solid #ebebeb;
-  background-color: #fbfbfb;
+}
+
+.li {
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.dropdownList > .li:last-child {
+  border-bottom: none;
+}
+
+.li {
+  margin: 10px 0;
 }
 
 .dropdownLink {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0.875rem;
-  color: #232323;
-  font-size: 0.75rem;
+  min-height: 1rem;
+  color: #171717;
+  font-size: 13px;
   text-decoration: none;
-  transition: background-color 0.2s ease;
+  transition:
+    color 0.5s ease,
+    opacity 0.5s ease;
+    margin-bottom: 0.5rem;
 }
 
 .dropdownLink:hover {
-  background-color: #f1f1f1;
+  opacity: 0.85;
+  color: #969696;
+}
+
+.dropdownLink:hover span {
+  margin-left: 0.25rem;
+  transition: 0.3s
 }
 
 .dropdownArrow {
-  color: #7c7c7c;
-  font-size: 0.75rem;
-}
-
-.dropdownPreview {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  padding: 0.875rem;
-}
-
-.previewCard {
-  display: block;
-  overflow: hidden;
-  border: 1px solid #ebebeb;
-  text-decoration: none;
-}
-
-.previewImage {
-  width: 100%;
-  height: 7.5rem;
-  object-fit: cover;
-  transition: transform 0.25s ease;
-}
-
-.previewCard:hover .previewImage {
-  transform: scale(1.04);
+  color: currentColor;
+  font-size: 1rem;
+  font-weight: 400;
 }
 
 @media (max-width: 64rem) {

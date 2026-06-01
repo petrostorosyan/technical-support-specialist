@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Header.module.css";
-import logo from "../../../assets/logo.svg";
-import SearchIcon from "../SearchIcon";
+import logo from "../../assets/logo.svg";
+import SearchIcon from "../icons/SearchIcon";
+import ChevronDownIcon from "../icons/ChevronDownIcon";
 
 const HIDE_AFTER_STICKY_OFFSET = 200;
 
@@ -92,43 +93,51 @@ const Header = () => {
         <div className={styles.container}>
           <div className={styles.menuItem}>
             <a href="/" className={styles.menuLink}>
-              Demos <span className={styles.caret}>v</span>
+              Demos{" "}
+              <span className={styles.caret}>
+                <ChevronDownIcon className={styles.menuChevron} />
+              </span>
             </a>
           </div>
 
           <div className={`${styles.menuItem} ${styles.menuItemWithDropdown}`}>
             <a href="/" className={styles.menuLink}>
-              Post <span className={styles.caret}>v</span>
+              Post{" "}
+              <span className={styles.caret}>
+                <ChevronDownIcon className={styles.menuChevron} />
+              </span>
             </a>
 
             <div className={styles.dropdown}>
               <ul className={styles.dropdownList}>
-                <li>
+                <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    Post Header{" "}
-                    <span className={styles.dropdownArrow}>{">"}</span>
+                    <span>Post Header</span>
+                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
                   </a>
                 </li>
-                <li>
+                <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    Post Layout{" "}
-                    <span className={styles.dropdownArrow}>{">"}</span>
+                    <span>Post Layout</span>
+                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
                   </a>
                 </li>
-                <li>
+                <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    Share Buttons{" "}
-                    <span className={styles.dropdownArrow}>{">"}</span>
+                    <span>Share Buttons</span>
+                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
                   </a>
                 </li>
-                <li>
+                <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    Gallery Post
+                    <span>Gallery Post</span>
+                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
                   </a>
                 </li>
-                <li>
+                <li className={styles.li}>
                   <a href="/" className={styles.dropdownLink}>
-                    Video Post
+                    <span>Video Post</span>                    
+                    <span className={styles.dropdownArrow}><ChevronDownIcon /></span>
                   </a>
                 </li>
               </ul>
@@ -137,19 +146,28 @@ const Header = () => {
 
           <div className={styles.menuItem}>
             <a href="/" className={styles.menuLink}>
-              Features <span className={styles.caret}>v</span>
+              Features{" "}
+              <span className={styles.caret}>
+                <ChevronDownIcon className={styles.menuChevron} />
+              </span>
             </a>
           </div>
 
           <div className={styles.menuItem}>
             <a href="/" className={styles.menuLink}>
-              Categories <span className={styles.caret}>v</span>
+              Categories{" "}
+              <span className={styles.caret}>
+                <ChevronDownIcon className={styles.menuChevron} />
+              </span>
             </a>
           </div>
 
           <div className={styles.menuItem}>
             <a href="/" className={styles.menuLink}>
-              Shop <span className={styles.caret}>v</span>
+              Shop{" "}
+              <span className={styles.caret}>
+                <ChevronDownIcon className={styles.menuChevron} />
+              </span>
             </a>
           </div>
 
