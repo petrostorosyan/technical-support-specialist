@@ -56,17 +56,16 @@ const PostsSection = ({ searchQuery }: PostsSectionProps) => {
   }, []);
 
   const filteredPosts = useMemo(() => {
-    const normalizedSearch = searchQuery.trim().toLowerCase();
+    const normalizedSearch = searchQuery.trim().toLowerCase().replace(/\s+/g, " ");
     if (!normalizedSearch) {
       return posts;
     }
 
     return posts.filter((post) => {
-      const title = post.title.toLowerCase();
-      const text = post.text.toLowerCase();
-      return (
-        title.includes(normalizedSearch) || text.includes(normalizedSearch)
-      );
+      const searchableText = `${post.title} ${post.text}`
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+      return searchableText.includes(normalizedSearch);
     });
   }, [posts, searchQuery]);
 

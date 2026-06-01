@@ -38,7 +38,8 @@
   width: 2.25rem;
   height: 2.25rem;
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border: 0;
+  border-radius: 0.25rem;
   background-color: #ffffff;
   align-items: center;
   justify-content: center;
@@ -213,7 +214,7 @@
 .mobileOverlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(10, 10, 10, 0.45);
+  background-color: rgba(255, 255, 255, 0.35);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -228,12 +229,13 @@
 }
 
 .mobileMenu {
-  width: min(18.75rem, calc(100% - 2rem));
+  width: min(19.5rem, 84vw);
   height: 100%;
-  background-color: #ffffff;
+  background-color: #f8f8f8;
   transform: translateX(-100%);
   transition: transform 0.28s ease;
-  padding: 1rem;
+  border-right: 1px solid #e9e9e9;
+  padding: 0;
 }
 
 .mobileMenuOpen {
@@ -241,25 +243,32 @@
 }
 
 .mobileMenuHeader {
+  height: 3.75rem;
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.mobileMenuLogo {
+  width: 9.5rem;
+  height: auto;
 }
 
 .closeButton {
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid #d5d5d5;
-  border-radius: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
   position: relative;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 .closeLine {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 1rem;
+  width: 0.875rem;
   height: 0.125rem;
   background-color: #161616;
 }
@@ -275,15 +284,31 @@
 .mobileNav {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+}
+
+.mobileSearchButton {
+  width: 1.875rem;
+  height: 1.875rem;
+  display: grid;
+  place-items: center;
+  color: #b5b5b5;
 }
 
 .mobileNavLink {
-  padding: 0.625rem 0.25rem;
-  border-bottom: 1px solid #ececec;
+  height: 2.375rem;
+  padding: 0 0.75rem;
+  border-bottom: 1px solid #e3e3e3;
   color: #111111;
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   text-decoration: none;
+}
+
+.mobileNavChevron {
+  color: #7b7b7b;
+  transform: rotate(90deg);
 }
 
 @media (max-width: 75.9375rem) {
@@ -313,8 +338,15 @@
     justify-content: center;
   }
 
+  .searchBox {
+    border: 0;
+    padding: 0;
+    gap: 0;
+    background: transparent;
+  }
+
   .searchInput {
-    width: 9rem;
+    display: none;
   }
 }
 

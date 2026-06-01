@@ -13,10 +13,13 @@ const HIDE_AFTER_STICKY_OFFSET = 200;
 
 const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
   const topBarRef = useRef<HTMLDivElement | null>(null);
+  const searchBoxRef = useRef<HTMLDivElement | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
   const lastScrollYRef = useRef(0);
   const [topBarHeight, setTopBarHeight] = useState(0);
   const [isMenuHidden, setIsMenuHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDesktopSearchOpen, setIsDesktopSearchOpen] = useState(false);
 
   useEffect(() => {
     const topBarElement = topBarRef.current;
@@ -88,6 +91,51 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+      return;
+    }
+
+    document.body.style.overflow = "";
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    if (!isDesktopSearchOpen) {
+      return;
+    }
+
+    searchInputRef.current?.focus();
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      const isDesktop = window.matchMedia("(min-width: 64.0625rem)").matches;
+      const target = event.target as Node;
+
+      if (
+        isDesktop &&
+        searchBoxRef.current &&
+        !searchBoxRef.current.contains(target) &&
+        !searchQuery
+      ) {
+        setIsDesktopSearchOpen(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !searchQuery) {
+        setIsDesktopSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isDesktopSearchOpen, searchQuery]);
+
   return (
     <>
       <header className={styles.header}>
@@ -106,10 +154,16 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
             <img src={logo} alt="Logo" className={styles.logo} />
 
-            <div className={styles.searchBox}>
+            <div
+              ref={searchBoxRef}
+              className={`${styles.searchBox} ${
+                isDesktopSearchOpen || searchQuery ? styles.searchBoxOpen : ""
+              }`}
+            >
               <input
+                ref={searchInputRef}
                 type="search"
-                placeholder="Search by title or description..."
+                placeholder="Search by title..."
                 className={styles.searchInput}
                 aria-label="Search input"
                 value={searchQuery}
@@ -119,6 +173,7 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
                 type="button"
                 className={styles.searchButton}
                 aria-label="Search"
+                onClick={() => setIsDesktopSearchOpen(true)}
               >
                 <SearchIcon width={16} height={16} />
               </button>
@@ -243,6 +298,8 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
           onClick={(event) => event.stopPropagation()}
         >
           <div className={styles.mobileMenuHeader}>
+            <img src={logo} alt="Logo" className={styles.mobileMenuLogo} />
+
             <button
               type="button"
               className={styles.closeButton}
@@ -256,22 +313,27 @@ const Header = ({ searchQuery, onSearchChange }: HeaderProps) => {
 
           <nav className={styles.mobileNav} aria-label="Mobile navigation">
             <a href="/" className={styles.mobileNavLink}>
-              Demos
+              <span>Demos</span>
+              <ChevronDownIcon className={styles.mobileNavChevron} />
             </a>
             <a href="/" className={styles.mobileNavLink}>
-              Post
+              <span>Post</span>
+              <ChevronDownIcon className={styles.mobileNavChevron} />
             </a>
             <a href="/" className={styles.mobileNavLink}>
-              Features
+              <span>Features</span>
+              <ChevronDownIcon className={styles.mobileNavChevron} />
             </a>
             <a href="/" className={styles.mobileNavLink}>
-              Categories
+              <span>Categories</span>
+              <ChevronDownIcon className={styles.mobileNavChevron} />
             </a>
             <a href="/" className={styles.mobileNavLink}>
-              Shop
+              <span>Shop</span>
+              <ChevronDownIcon className={styles.mobileNavChevron} />
             </a>
             <a href="/" className={styles.mobileNavLink}>
-              Buy Now
+              <span>Buy Now</span>
             </a>
           </nav>
         </aside>
